@@ -1,5 +1,6 @@
 package gui.util;
 
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -11,5 +12,5 @@ public class Alerts {
 		alert.setHeaderText(header);
 		alert.setContentText(content);
 		alert.show();
-	}
+		}
 }
