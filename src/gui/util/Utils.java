@@ -13,7 +13,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import model.entities.Department;
 
 public class Utils {
 

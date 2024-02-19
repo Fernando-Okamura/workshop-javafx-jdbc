@@ -37,8 +37,9 @@ import model.services.SellerService;
 public class SellerListController implements Initializable, DataChangeListener {
 
 	private SellerService service;
+
 	@FXML
-	private TableView<Seller> tableViewDeparment;
+	private TableView<Seller> tableViewSeller;
 
 	@FXML
 	private TableColumn<Seller, Integer> tableColumnId;
@@ -48,15 +49,15 @@ public class SellerListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private TableColumn<Seller, String> tableColumnEmail;
-
+	
 	@FXML
 	private TableColumn<Seller, Date> tableColumnBirthDate;
-
+	
 	@FXML
 	private TableColumn<Seller, Double> tableColumnBaseSalary;
-
+	
 	@FXML
-	TableColumn<Seller, Seller> tableColumnEDIT;
+	private TableColumn<Seller, Seller> tableColumnEDIT;
 
 	@FXML
 	private TableColumn<Seller, Seller> tableColumnREMOVE;
@@ -92,7 +93,7 @@ public class SellerListController implements Initializable, DataChangeListener {
 		Utils.formatTableColumnDouble(tableColumnBaseSalary, 2);
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();
-		tableViewDeparment.prefHeightProperty().bind(stage.heightProperty());
+		tableViewSeller.prefHeightProperty().bind(stage.heightProperty());
 	}
 
 	public void updateTableView() {
@@ -101,14 +102,12 @@ public class SellerListController implements Initializable, DataChangeListener {
 		}
 		List<Seller> list = service.findAll();
 		obsList = FXCollections.observableArrayList(list);
-		tableViewDeparment.setItems(obsList);
+		tableViewSeller.setItems(obsList);
 		initEditButtons();
 		initRemoveButtons();
-
 	}
 
 	private void createDialogForm(Seller obj, String absoluteName, Stage parentStage) {
-
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
@@ -117,7 +116,7 @@ public class SellerListController implements Initializable, DataChangeListener {
 			controller.setSeller(obj);
 			controller.setServices(new SellerService(), new DepartmentService());
 			controller.loadAssociatedObjects();
-			controller.subrscribeDataChangeListener(this);
+			controller.subscribeDataChangeListener(this);
 			controller.updateFormData();
 
 			Stage dialogStage = new Stage();
@@ -127,12 +126,10 @@ public class SellerListController implements Initializable, DataChangeListener {
 			dialogStage.initOwner(parentStage);
 			dialogStage.initModality(Modality.WINDOW_MODAL);
 			dialogStage.showAndWait();
-
 		} catch (IOException e) {
 			e.printStackTrace();
 			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
 		}
-
 	}
 
 	@Override
@@ -153,7 +150,8 @@ public class SellerListController implements Initializable, DataChangeListener {
 					return;
 				}
 				setGraphic(button);
-				button.setOnAction(event -> createDialogForm(obj, "/gui/SellerForm.fxml", Utils.currentStage(event)));
+				button.setOnAction(
+						event -> createDialogForm(obj, "/gui/SellerForm.fxml", Utils.currentStage(event)));
 			}
 		});
 	}
@@ -186,10 +184,10 @@ public class SellerListController implements Initializable, DataChangeListener {
 			try {
 				service.remove(obj);
 				updateTableView();
-			} catch (DbIntegrityException e) {
+			}
+			catch (DbIntegrityException e) {
 				Alerts.showAlert("Error removing object", null, e.getMessage(), AlertType.ERROR);
 			}
 		}
 	}
-
 }
